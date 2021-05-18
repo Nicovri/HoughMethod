@@ -4,6 +4,8 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 SOURCES += main.cpp
+SOURCES += image.hpp
+SOURCES += image.cpp
 
 include(deployment.pri)
 qtcAddDeployment()
