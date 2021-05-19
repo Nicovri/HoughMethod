@@ -14,6 +14,14 @@ Image::Image(String path)
 
 Image::~Image() { }
 
+String Image::GetPath() { return m_path; }
+
+void Image::SetPath(String Path) { m_path = Path; }
+
+Mat Image::GetImage() { return m_image; }
+
+void Image::SetImage(Mat Img) {m_image = Img.clone(); }
+
 void Image::DisplayImage(String windowName)
 {
     if(m_image.empty()) {
@@ -180,11 +188,17 @@ Mat Image::HoughCircleMethod()
     // A partir de 5, seules les pièces sont ciblées
     medianBlur(imageGray, imageGray, 5);
 
+    // Applique un filtre de Canny sur l'image pour ne garder que les bords des objets. Varie selon les paramètres donnés
+    Canny(imageGray, imageGray, 200, 250);
+
+    // Déclaration d'une liste de vecteurs à 3 coordonnées
     vector<Vec3f> cercles;
+
+    // Méthode de Hough pour la détection de cercles à appliquer sur l'imageGray et rempli la liste de cercles
     HoughCircles(imageGray, cercles, CV_HOUGH_GRADIENT, 1, imageGray.rows/16, 100, 30, 20, 100);
 
     for(int i = 0;i < (int)cercles.size(); i++) {
-        // Récupère chaque cercle ciblé par la méthode HoughCircles
+        // Récupère chaque cercle ciblé par la méthode HoughCircles (x abscisse du centre, y ordonnée du centre, r rayon du cercle)
         Vec3f cercle = cercles[i];
 
         // Point du centre de chaque cercle trouvé (index 0 et 1 du cercle, à savoir x et y)
@@ -197,10 +211,31 @@ Mat Image::HoughCircleMethod()
         int radius = cercle[2];
         circle(imageColor, center, radius, Scalar(200, 0, 0), 2);
     }
+
     return imageColor;
 }
 
 Mat Image::HoughLineMethod()
 {
+    Mat imageEdges;
+    Mat imageColor = m_image.clone();
 
+    // Filtre de Canny sur l'image à analyser
+    Canny(m_image, imageEdges, 100, 100);
+
+    // Déclaration d'une liste de vecteurs à 4 coordonnées
+    vector<Vec4i> lines;
+
+    // Méthode de Hough pour la détection de ligne. Rempli lines avec les coordonnées x et y de 2 points sur la ligne
+    HoughLinesP(imageEdges, lines, 1, CV_PI/180, 50, 50, 10);
+
+    for(int i = 0;i < lines.size();i++) {
+
+        //Récupère chaque doublet de coordonnées
+        Vec4i l = lines[i];
+
+        // Dessine une ligne sur imageColor, ayant deux points de coordonnées (l[0], l[1]) et (l[2], l[3]), de couleur Scalar(B, G, R) et d'épaisseur de trait 3
+        line(imageColor, Point(l[0], l[1]), Point(l[2], l[3]), Scalar(0, 0, 255), 3);
+    }
+    return imageColor;
 }

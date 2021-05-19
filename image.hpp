@@ -17,6 +17,11 @@ public:
     Image(String path);
     ~Image();
 
+    String GetPath();
+    void SetPath(String Path);
+    Mat GetImage();
+    void SetImage(Mat Img);
+
     void DisplayImage(String windowName);
     void DisplayOtherImage(String windowName, Mat image);
 
@@ -29,6 +34,7 @@ public:
     Mat GreenColorFilter();
     Mat RedColorFilter();
     Mat ColorFilters();
+
 
     Mat HoughCircleMethod();
     Mat HoughLineMethod();

@@ -10,7 +10,7 @@ using namespace std;
 
 int main()
 {
-    String imgloc = "C:/Users/NicoVri/Pictures/Hough Images/Pieces.png"; // Chemin direct de l'image dans l'ordinateur
+    String imgloc = "C:/Users/NicoVri/Pictures/Hough Images/RubiksCube.jpg"; // Chemin direct de l'image dans l'ordinateur
     Image image(imgloc);
     image.DisplayImage("Image Window");
 
@@ -30,5 +30,6 @@ int main()
     //image.DisplayOtherImage("RedColorFilter Window", image.RedColorFilter());
     //image.DisplayOtherImage("ColorFilters Window", image.ColorFilters());
 
-    image.DisplayOtherImage("Hough Window", image.HoughCircleMethod());
+    //image.DisplayOtherImage("Hough Circle Window", image.HoughCircleMethod());
+    image.DisplayOtherImage("Hough Line Window", image.HoughLineMethod());
 }
